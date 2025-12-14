@@ -1,0 +1,39 @@
+# Set environment variables
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# Set APM to automatic
+apm -A
+
+# Run Emacs daemon if not running
+if ! pgrep -u "$USER" emacs >/dev/null 2>&1; then
+    emacs --daemon &
+fi
+
+# Load ~/.kshrc if exists
+if [ -f "$HOME/.kshrc" ]; then
+    export ENV="$HOME/.kshrc"
+fi
+
+# Start compositor to fix tearing and add eye candy
+picom --config ~/Programming/dwm/picom/picom.conf --daemon &
+
+# Set wallpaper
+~/.fehbg
+
+# Set screensaver + lockscreen
+xidle -delay 5 -nw -program "/usr/X11R6/bin/xlock -mode space -lockdelay 60" -timeout 300 &
+
+# This will make Xterm be able to increase font size on keyboard shortcut
+xrdb -merge ~/.Xresources
+
+# Set your keymap and variant
+setxkbmap hr us
+
+# Set DWM status in top right corner
+sh /home/darth/Programming/dwm/xsetroot/status.sh &
+
+# Run DWM forever
+while true; do
+    /home/darth/Programming/dwm/dwm
+done
